@@ -1,0 +1,1 @@
+ sh remote_install_redis.sh  -m rdb25v.infra.bjac.pdtv.it -s "rdb26v.infra.bjac.pdtv.it rdb27v.infra.bjac.pdtv.it rdb28v.infra.bjac.pdtv.it rdb29v.infra.bjac.pdtv.it rdb30v.infra.bjac.pdtv.it rdb31v.infra.bjac.pdtv.it rdb32v.infra.bjac.pdtv.it" -p bRVUo6b6GaCVgq1QT  -P 6984 -g 15

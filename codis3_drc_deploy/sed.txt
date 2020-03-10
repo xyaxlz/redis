@@ -1,0 +1,2 @@
+sed 's/ > / >> /g' /data/scripts/supervise/cache*/run
+sed 's/ 2>\// 2>>\//g' /data/scripts/supervise/cache*/run

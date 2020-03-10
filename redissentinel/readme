@@ -1,0 +1,14 @@
+ansible-playbook -i hosts  deploy.yml  -k -K -b  -e "proxyargs='8888 18888 arch.testSentinel_redis.tcp'"
+ansible -i hosts all -m shell -a "ps aux|grep  arch.testSentinel_redis.tcp|grep -v grep " -k -k -b -u op_DBA01
+
+
+ansible -i hosts  all -m shell -a "ls -d /data/logs/redisproxy " -k -K -b -u op_DBA01
+
+
+ansible -i hosts2  all -m shell -a "ps aux|grep redisproxy|grep -v grep |awk '{print \$2}' |xargs kill    " -k -K -b -u op_DBA01
+ansible -i hosts2  all -m shell -a "ps aux|grep redisproxy " -k -K -b -u op_DBA01
+ansible -i hosts2  all -m shell -a "ls  /data/www/redisproxy  " -k -K -b -u op_DBA01
+
+ansible -i hosts  all -m shell -a "ps aux|grep redisproxy|grep -v grep |awk '{print \$2}' |xargs kill    " -k -K -b -u op_DBA01
+ansible -i hosts  all -m shell -a "ps aux|grep redisproxy " -k -K -b -u op_DBA01
+ansible -i hosts  all -m shell -a "ls  /data/www/redisproxy  " -k -K -b -u op_DBA01
