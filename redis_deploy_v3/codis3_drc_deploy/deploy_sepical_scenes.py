@@ -342,7 +342,7 @@ def deploy_and_startup_redis(user, ssh_port, redis_host, redis_port, max_mem_siz
 
 
 @task
-def dashboard_add_groups_and_servers(user, ssh_port, dashboard_host, dashboard_port, master_host, slave_host, redis_port, start_group):
+def dashboard_add_groups_and_servers(user, ssh_port, dashboard_host, dashboard_port, main_host, subordinate_host, redis_port, start_group):
     parm = ParmParse(**locals())
     ret = execute(add_groups,
                   host=parm.dashboard_host_str,
@@ -357,7 +357,7 @@ def dashboard_add_groups_and_servers(user, ssh_port, dashboard_host, dashboard_p
                   host=parm.dashboard_host_str,
                   redis_port=parm.redis_port,
                   dashboard_port=parm.dashboard_port,
-                  host_list=[(parm.master_host, parm.slave_host)],
+                  host_list=[(parm.main_host, parm.subordinate_host)],
                   start_group=parm.start_group)
     for _, each_ret in ret.items():
         if not each_ret:
@@ -395,15 +395,15 @@ def dashboard_add_watcher(user, ssh_port, dashboard_host, dashboard_port, watche
 
 @task
 def config_special_dashboard(user, ssh_port, dashboard_host, dashboard_port,
-                             watcher_port, master_host, slave_host,
+                             watcher_port, main_host, subordinate_host,
                              redis_port, start_group):
     parm = ParmParse(**locals())
     ret = execute(config_dashboard,
                   host=parm.dashboard_host_str,
                   redis_port=parm.redis_port,
                   dashboard_port=parm.dashboard_port,
-                  master_host=parm.master_host,
-                  slave_host=parm.slave_host,
+                  main_host=parm.main_host,
+                  subordinate_host=parm.subordinate_host,
                   start_group=start_group)
     for _, each_ret in ret.items():
         if not each_ret:

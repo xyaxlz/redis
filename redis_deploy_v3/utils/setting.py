@@ -52,10 +52,10 @@ rdbchecksum yes
 dbfilename "redis-{{port}}-dump.rdb"
 appendfilename "redis-{{port}}.aof"
 dir "/data/server/redis/data"
-slave-serve-stale-data yes
-slave-read-only no
+subordinate-serve-stale-data yes
+subordinate-read-only no
 repl-disable-tcp-nodelay no
-slave-priority 100
+subordinate-priority 100
 {% if aof -%}
 appendonly yes
 appendfsync everysec
@@ -82,7 +82,7 @@ zset-max-ziplist-entries 128
 zset-max-ziplist-value 64
 activerehashing yes
 client-output-buffer-limit normal 0 0 0
-client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit subordinate 256mb 64mb 60
 client-output-buffer-limit pubsub 32mb 8mb 60
 hz 10
 aof-rewrite-incremental-fsync yes

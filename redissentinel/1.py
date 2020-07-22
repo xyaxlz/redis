@@ -37,8 +37,8 @@ def send_mail(title, level="error"):
     body = "<table align='center' border='2' cellpadding='0' cellspacing='0' width='700' style='border-collapse:collapse;'>" \
         "<tr><td colspan=2 align='center' style='color:red'>{title}</td></tr>" \
         "<tr><td class='left'>集群名字</td><td>{namespace}</td></tr>" \
-        "<tr><td class='left'>old master</td><td>{failed_addr}</td></tr>" \
-        "<tr><td class='left'>new master</td><td>{success_addr}</td></tr>" \
+        "<tr><td class='left'>old main</td><td>{failed_addr}</td></tr>" \
+        "<tr><td class='left'>new main</td><td>{success_addr}</td></tr>" \
     "</table>".format(
         title=title,
         namespace=namespace,
@@ -76,7 +76,7 @@ def send_mail(title, level="error"):
 #def send_sms(res):
 def send_sms(res):
     msg = "redis故障迁移,结果:{res}，集群:{namespace}，详细:"\
-        "old-master（{failed_addr}），new-master:（{success_addr}）".format(
+        "old-main（{failed_addr}），new-main:（{success_addr}）".format(
         res=res,
         namespace=namespace,
         failed_addr=failed_addr,

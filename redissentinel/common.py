@@ -139,7 +139,7 @@ def stop_drc():
         return True
 
     url = get_drc_url(failureClusterAlias)
-    param = {"master": ""}
+    param = {"main": ""}
     res = http_put(url, param)
     return res
 
@@ -158,14 +158,14 @@ def start_drc(host, port):
 
     url = get_drc_url(failureClusterAlias)
 
-    param = {"master": "{}:{}".format(host, port)}
+    param = {"main": "{}:{}".format(host, port)}
     res = http_put(url, param)
     return res
 
 
 def get_drc_url(clusterName):
     ser = zynsc_cli.get_service(mydrc_ns)
-    return "http://{}:{}/mydrc/mariadb/{}/master".format(ser.host, ser.port, clusterName)
+    return "http://{}:{}/mydrc/mariadb/{}/main".format(ser.host, ser.port, clusterName)
 
 
 def forget(host, port):
@@ -176,8 +176,8 @@ def forget(host, port):
     return None
 
 
-def start_slave(host, port):
-    url = "{}/api/start-slave/{}/{}".format(orch_url, host, port)
+def start_subordinate(host, port):
+    url = "{}/api/start-subordinate/{}/{}".format(orch_url, host, port)
     res = http_get(url, {})
     if res and res["Code"] == "OK":
         return res
@@ -301,8 +301,8 @@ def send_mail(title, level="error"):
         "<tr><td colspan=2 align='center' style='color:red'>{title}</td></tr>" \
         "<tr><td class='left'>集群名字</td><td>{namespace}</td></tr>" \
         "<tr><td class='left'>迁移的原因</td><td>{failureType}</td></tr>" \
-        "<tr><td class='left'>old master</td><td>{failedHost}:{failedPort}</td></tr>" \
-        "<tr><td class='left'>new master</td><td>{successorHost}:{successorPort}</td></tr>" \
+        "<tr><td class='left'>old main</td><td>{failedHost}:{failedPort}</td></tr>" \
+        "<tr><td class='left'>new main</td><td>{successorHost}:{successorPort}</td></tr>" \
         "<tr><td class='left'>详情</td><td><a style='width: 550px; display: block;word-break:break-word;'>{link}</a></td></tr>" \
     "</table>".format(
         title=title,
@@ -343,7 +343,7 @@ def send_mail(title, level="error"):
 
 def send_sms(res):
     msg = "mysql故障迁移，结果:{res}，集群:{namespace}，原因:{failureType}，"\
-        "old-master（{failedHost}:{failedPort}），new-master:（{successorHost}:{successorPort}）".format(
+        "old-main（{failedHost}:{failedPort}），new-main:（{successorHost}:{successorPort}）".format(
         res=res,
         namespace=failureClusterAlias,
         failureType=failureType,

@@ -68,7 +68,7 @@ func checkErr(err error) {
 }
 
 //把获取的从库ip数组，和数据库名数组，插入到远程元数据数据库
-func insertDB(hostIp string, port string, masterIp string, flag string, cacheName string, IDC string) {
+func insertDB(hostIp string, port string, mainIp string, flag string, cacheName string, IDC string) {
 	//生成数据库连接地址
 	regPath := strings.Join([]string{regUserName, ":", regPassword, "@tcp(", regIp, ":", regPort, ")/", regDbName, "?charset=utf8"}, "")
 	//fmt.Println(regPath)
@@ -87,10 +87,10 @@ func insertDB(hostIp string, port string, masterIp string, flag string, cacheNam
 
 	//循环从库ip数组远程注册到元数据库 flag为0
 	//远程注册从库ip和端口到元数据库
-	_, err1 := stmt.Exec(hostIp, port, masterIp, flag, cacheName, IDC)
+	_, err1 := stmt.Exec(hostIp, port, mainIp, flag, cacheName, IDC)
 	checkErr(err1)
-	//fmt.Printf("replace into codis_asset (ip,port,mip,flag,cachename,idc) values (%s, %s, %s, %s, %s, %s) \n", hostIp, port, masterIp, flag, cacheName, IDC)
-	fmt.Printf("insert  into codis_asset (ip,port,mip,flag,cachename,idc) values (%s, %s, %s, %s, %s, %s)  ON DUPLICATE KEY UPDATE mip=values(mip),flag=values(flag),cachename=values(cachename) , idc=values(idc) \n", hostIp, port, masterIp, flag, cacheName, IDC)
+	//fmt.Printf("replace into codis_asset (ip,port,mip,flag,cachename,idc) values (%s, %s, %s, %s, %s, %s) \n", hostIp, port, mainIp, flag, cacheName, IDC)
+	fmt.Printf("insert  into codis_asset (ip,port,mip,flag,cachename,idc) values (%s, %s, %s, %s, %s, %s)  ON DUPLICATE KEY UPDATE mip=values(mip),flag=values(flag),cachename=values(cachename) , idc=values(idc) \n", hostIp, port, mainIp, flag, cacheName, IDC)
 
 }
 
