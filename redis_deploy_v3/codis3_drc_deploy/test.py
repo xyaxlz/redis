@@ -33,12 +33,12 @@ def deploy_no_drc_codis_cluster_m5test():
     max_mem_size = 0
 
     m5_dashboard_host = "10.100.90.163"
-    m5_master1 = "10.100.90.161"
-    m5_slave1 = "10.100.90.162"
-    m5_redis_host_list = [(m5_master1, m5_slave1)]
-    m5_proxy_hosts = [m5_master1, m5_slave1]
-    m5_sentinel_hosts = [m5_master1, m5_slave1, m5_dashboard_host]
-    #m5_sentinel_hosts = [m5_master1, m5_slave1]
+    m5_main1 = "10.100.90.161"
+    m5_subordinate1 = "10.100.90.162"
+    m5_redis_host_list = [(m5_main1, m5_subordinate1)]
+    m5_proxy_hosts = [m5_main1, m5_subordinate1]
+    m5_sentinel_hosts = [m5_main1, m5_subordinate1, m5_dashboard_host]
+    #m5_sentinel_hosts = [m5_main1, m5_subordinate1]
 
     redis_start_port = 7150
     group_num_of_each_pair = 2

@@ -32,7 +32,7 @@ class parm_parse():
 
             self.pkg_urls['bk_script'] = '%s/backup_redis.sh' % self.repo_url
 
-            redis_scripts = ['redis_master', 'redis_backup', 'redis_fault', 'redis_stop']
+            redis_scripts = ['redis_main', 'redis_backup', 'redis_fault', 'redis_stop']
             for each in redis_scripts:
                 self.pkg_urls[each] = '%s/%s.sh' % (self.repo_url, each)
 

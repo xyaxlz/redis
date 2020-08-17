@@ -19,7 +19,7 @@ from utils.setting import GlobalVar as gvar
 
 
 @task
-def deploy_redis_replica(master_host, slave_host, redis_host_str, redis_port,
+def deploy_redis_replica(main_host, subordinate_host, redis_host_str, redis_port,
                          backup_invl, pkg_urls, redis_cfg):
     with settings(parallel=True):
         ret = execute(create_user,
@@ -53,15 +53,15 @@ def deploy_redis_replica(master_host, slave_host, redis_host_str, redis_port,
             if not each_ret:
                 return 303
 
-        ret = slaveof(slave_host, redis_port,
-                      master_host, redis_port)
+        ret = subordinateof(subordinate_host, redis_port,
+                      main_host, redis_port)
         if not ret:
             return 304
 
         ret = execute(deploy_ha_scripts,
                       hosts=redis_host_str,
-                      master_host=master_host,
-                      slave_host=slave_host,
+                      main_host=main_host,
+                      subordinate_host=subordinate_host,
                       redis_port=redis_port,
                       pkg_urls=pkg_urls)
         for _, each_ret in ret.items():
@@ -207,26 +207,26 @@ def startup_redis(redis_port):
     return 1
 
 
-def slaveof(slave_host, slave_port, master_host, master_port):
-    r = redis.Redis(host=slave_host, port=slave_port, db=0)
-    r.slaveof(master_host, master_port)
+def subordinateof(subordinate_host, subordinate_port, main_host, main_port):
+    r = redis.Redis(host=subordinate_host, port=subordinate_port, db=0)
+    r.subordinateof(main_host, main_port)
     role = r.info()['role']
     f_name, f_lineno = get_code_info()
     f_lineno -= 2
-    if role == 'slave':
-        gvar.LOGGER.info("%s[line:%d] Slaveof execute succed." %
+    if role == 'subordinate':
+        gvar.LOGGER.info("%s[line:%d] Subordinateof execute succed." %
                          (f_name, f_lineno))
         return 1
     else:
-        gvar.LOGGER.error("%s[line:%d] Slaveof execute failed." %
+        gvar.LOGGER.error("%s[line:%d] Subordinateof execute failed." %
                           (f_name, f_lineno))
         return 0
 
-def deploy_ha_scripts(master_host, slave_host, redis_port, pkg_urls):
+def deploy_ha_scripts(main_host, subordinate_host, redis_port, pkg_urls):
     err_flg = [0]
 
     with settings(warn_only=True):
-        scripts = ['redis_master', 'redis_backup', 'redis_fault', 'redis_stop']
+        scripts = ['redis_main', 'redis_backup', 'redis_fault', 'redis_stop']
         for each in scripts:
             chk_script_cmd = '[ -f %s/%s.sh ]' % (gvar.SCRIPT_DIR, each)
             log_str = '[%s] Check backup scripts' % env.host
@@ -240,22 +240,22 @@ def deploy_ha_scripts(master_host, slave_host, redis_port, pkg_urls):
                 sudo_and_chk(get_script_cmd, log_str, err_flg, get_code_info())
                 if err_flg[0]:
                     return 0
-        if env.host == master_host:
-            change_host = slave_host
+        if env.host == main_host:
+            change_host = subordinate_host
         else:
-            change_host = master_host
+            change_host = main_host
 
-        redis_master_chk = 'less %s/redis_master.sh |\
+        redis_main_chk = 'less %s/redis_main.sh |\
 egrep -w "SLAVEOF" |egrep -w "%d"' % (gvar.SCRIPT_DIR, redis_port)
         log_str = '[%s] Check redis_backup file whether exists entry' % env.host
-        ret = sudo_and_chk(redis_master_chk, log_str, [0],
+        ret = sudo_and_chk(redis_main_chk, log_str, [0],
                            get_code_info(), info_only=1)
         if not ret:
-            add_redis_master =\
+            add_redis_main =\
                 'echo "\\\\$REDISCli -p %d SLAVEOF NO ONE >> \\\\$LOGFILE \
-2>&1" >> %s/redis_master.sh' % (redis_port, gvar.SCRIPT_DIR)
-            log_str = '[%s] Add entry into redis_master script.' % env.host
-            sudo_and_chk(add_redis_master, log_str, err_flg,
+2>&1" >> %s/redis_main.sh' % (redis_port, gvar.SCRIPT_DIR)
+            log_str = '[%s] Add entry into redis_main script.' % env.host
+            sudo_and_chk(add_redis_main, log_str, err_flg,
                          get_code_info())
             if err_flg[0]:
                 return 0

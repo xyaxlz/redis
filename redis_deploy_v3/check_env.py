@@ -17,12 +17,12 @@ from utils.setting import GlobalVar as gvar
 
 
 @task
-def check(master_host, master_host_str, slave_host, slave_host_str,
+def check(main_host, main_host_str, subordinate_host, subordinate_host_str,
           redis_host_str, redis_port, redis_ver):
 
     with settings(parallel=True):
-        ret = chk_redis_ver_btw_ms(master_host, master_host_str, slave_host,
-                                   slave_host_str, redis_ver)
+        ret = chk_redis_ver_btw_ms(main_host, main_host_str, subordinate_host,
+                                   subordinate_host_str, redis_ver)
         if not ret:
             return 101
 
@@ -39,61 +39,61 @@ def check(master_host, master_host_str, slave_host, slave_host_str,
 
 
 @task
-def chk_redis_ver_btw_ms(master_host, master_host_str, slave_host,
-                         slave_host_str, redis_ver):
+def chk_redis_ver_btw_ms(main_host, main_host_str, subordinate_host,
+                         subordinate_host_str, redis_ver):
     ret = execute(get_redis_ver,
-                  host=master_host_str)
-    master_ver = ret.values()[0]
+                  host=main_host_str)
+    main_ver = ret.values()[0]
 
     ret = execute(get_redis_ver,
-                  host=slave_host_str)
-    slave_ver = ret.values()[0]
+                  host=subordinate_host_str)
+    subordinate_ver = ret.values()[0]
 
-    """Judge whether one of slave's version or master's version is None,
+    """Judge whether one of subordinate's version or main's version is None,
     and whether the another server's version is different with redis package
     version"""
-    if master_ver != slave_ver and\
-       (not master_ver and slave_ver and slave_ver != redis_ver)\
+    if main_ver != subordinate_ver and\
+       (not main_ver and subordinate_ver and subordinate_ver != redis_ver)\
        or\
-       (master_ver and not slave_ver and master_ver != redis_ver):
-        if master_ver:
-            log_str = "Master redis version is different with redis"\
-                "package version. And slave need to be installed redis."\
-                "Master version is %s" % master_ver
+       (main_ver and not subordinate_ver and main_ver != redis_ver):
+        if main_ver:
+            log_str = "Main redis version is different with redis"\
+                "package version. And subordinate need to be installed redis."\
+                "Main version is %s" % main_ver
         else:
-            log_str = "Slave redis version is different with redis"\
-                "package version. And master need to be installed redis."\
-                "Slave version is %s" % slave_ver
+            log_str = "Subordinate redis version is different with redis"\
+                "package version. And main need to be installed redis."\
+                "Subordinate version is %s" % subordinate_ver
         gvar.LOGGER.error(log_str)
         return 0
 
-    if master_ver and slave_ver and master_ver != slave_ver:
-        gvar.LOGGER.error("Master and slave are not the same version. "
-                          "Master version is `%s`. Slave is `%s`." %
-                          (master_ver, slave_ver))
+    if main_ver and subordinate_ver and main_ver != subordinate_ver:
+        gvar.LOGGER.error("Main and subordinate are not the same version. "
+                          "Main version is `%s`. Subordinate is `%s`." %
+                          (main_ver, subordinate_ver))
 
         return 0
 
     """If any server could not get redis version,
     then check redis dir whether exist"""
     err_flg = [0]
-    if not master_ver:
+    if not main_ver:
         ret = execute(chk_redis_dir,
-                      host=master_host_str)
+                      host=main_host_str)
         if not ret.values()[0]:
             err_flg[0] = 1
             gvar.LOGGER.error(
-                "[%s] e_____ clean master `/data/server/redis` dir" %
-                master_host)
+                "[%s] e_____ clean main `/data/server/redis` dir" %
+                main_host)
 
-    if not slave_ver:
+    if not subordinate_ver:
         ret = execute(chk_redis_dir,
-                      host=slave_host_str)
+                      host=subordinate_host_str)
         if not ret.values()[0]:
             err_flg[0] = 1
             gvar.LOGGER.error(
-                "[%s] Please clean slave `/data/server/redis` dir" %
-                slave_host)
+                "[%s] Please clean subordinate `/data/server/redis` dir" %
+                subordinate_host)
 
     if err_flg[0]:
         return 0

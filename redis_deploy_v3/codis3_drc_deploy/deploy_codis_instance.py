@@ -709,30 +709,30 @@ def setup_redis_replication(dashboard_port):
             servers = model['servers']
             for i, server in enumerate(servers):
                 if i == 0:
-                    master_ip = server['server'].split(":")[0]
-                    master_port = server['server'].split(":")[1]
+                    main_ip = server['server'].split(":")[0]
+                    main_port = server['server'].split(":")[1]
                 else:
-                    slave_ip = server['server'].split(":")[0]
-                    slave_port = int(server['server'].split(":")[1])
-                    r = redis.Redis(host=slave_ip, port=slave_port)
+                    subordinate_ip = server['server'].split(":")[0]
+                    subordinate_port = int(server['server'].split(":")[1])
+                    r = redis.Redis(host=subordinate_ip, port=subordinate_port)
                     # 最多尝试三次,一次成功退出
                     success_flg = 0
                     for j in range(3):
                         try:
                             f_name, f_lineno = get_code_info()
                             f_lineno += 2
-                            ret = r.slaveof(master_ip, master_port)
+                            ret = r.subordinateof(main_ip, main_port)
                             if ret:
                                 success_flg = 1
-                                log_str = "%s:[line:%d] [%s] Redis %s Slaveof execute succeed." % \
-                                          (f_name, f_lineno, slave_ip, slave_port)
+                                log_str = "%s:[line:%d] [%s] Redis %s Subordinateof execute succeed." % \
+                                          (f_name, f_lineno, subordinate_ip, subordinate_port)
                                 gvar.LOGGER.info(log_str)
                                 break
                         except Exception as e:
                             f_name, f_lineno = get_code_info()
                             f_lineno -= 9
                             gvar.LOGGER.warning("%s:[line:%d] [%s] %s" % \
-                                                (f_name, f_lineno, slave_server, e))
+                                                (f_name, f_lineno, subordinate_server, e))
                     if success_flg:
                         break
                     # else:
@@ -740,8 +740,8 @@ def setup_redis_replication(dashboard_port):
                     #                       (f_name, f_lineno, env.host, e))
 
                     if not success_flg:
-                        gvar.LOGGER.warning("%s:[line:%d] [%s:%d] Slaveof execute failed." % \
-                                            (f_name, f_lineno, slave_ip, slave_port))
+                        gvar.LOGGER.warning("%s:[line:%d] [%s:%d] Subordinateof execute failed." % \
+                                            (f_name, f_lineno, subordinate_ip, subordinate_port))
                         return 0
     return 1
 

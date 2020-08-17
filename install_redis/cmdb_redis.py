@@ -31,7 +31,7 @@ admin_password='BZs*gIyVeH4o0q!f'
 dbadmin_host='10.131.9.133'
 dbadmin_port=3306
 idc_list={'bjac':0,'bjza':1}
-role_list={'master':0,"slave":1}
+role_list={'main':0,"subordinate":1}
 def get_time():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
@@ -40,16 +40,16 @@ def arg_parse():
     parse = argparse.ArgumentParser(description='Redis OPS')
     parse.add_argument('--cmd', '-c', default='add_host',help='add host')
     parse.add_argument('--port', '-P', default='0',help='redis port')
-    parse.add_argument('--role', '-r', default='slave',help='redis role')
+    parse.add_argument('--role', '-r', default='subordinate',help='redis role')
     parse.add_argument('--vip', '-L', default='',help='vip')
-    parse.add_argument('--slave', '-H', type=str, default='',help='hostname')
+    parse.add_argument('--subordinate', '-H', type=str, default='',help='hostname')
     parse.add_argument('--idc', '-I', default='bjac',help='redis idc')
     parse.add_argument('--ip', '-a', default='',help='redis idc')
     parse.add_argument('--prod_info', '-d', default='',help='redis prod')
-    parse.add_argument('--master', '-m', default='',help='redis master')
+    parse.add_argument('--main', '-m', default='',help='redis main')
     parse.add_argument('--tag', '-t', default='',help='host tag')
     return parse, parse.parse_args()
-def add_redis(port,db_role,vip,hostname,idc,ip,prod_info,master):
+def add_redis(port,db_role,vip,hostname,idc,ip,prod_info,main):
     db_ins=MySQLBase(admin_host,admin_port,admin_user,admin_password) 
     dbadmin_ins=MySQLBase(dbadmin_host,dbadmin_port,admin_user,admin_password) 
     db_ins.connection()
@@ -58,10 +58,10 @@ def add_redis(port,db_role,vip,hostname,idc,ip,prod_info,master):
     dbadmin_ins.cursor()
     cur_dt=get_time()
     if int(db_role)==0:
-	role='master'
+	role='main'
     else:
-	role='slave'
-    sql="replace into  cmdb.redis_ins (port,db_role,vip,hostname,idc,ip,prod_info,master)values(%d,%d,'%s','%s',%d,'%s','%s','%s');"%(int(port),int(db_role),vip,hostname,int(idc),ip,prod_info,master)
+	role='subordinate'
+    sql="replace into  cmdb.redis_ins (port,db_role,vip,hostname,idc,ip,prod_info,main)values(%d,%d,'%s','%s',%d,'%s','%s','%s');"%(int(port),int(db_role),vip,hostname,int(idc),ip,prod_info,main)
     dbadmin_sql="replace into dbadmin.app_redis(ip,port,role,owner,version,vip,date) values('%s',%d,'%s','%s','3.2','%s','%s')"%(ip,int(port),role,prod_info,vip,cur_dt)
     print sql
     print dbadmin_sql
@@ -94,15 +94,15 @@ def cmdb_op():
      port=opts.port
      db_role=int(role_list[opts.role])
      vip=opts.vip
-     slave=opts.slave
+     subordinate=opts.subordinate
      idc=idc_list[opts.idc]
      ip=opts.ip
      #if not ip:
     # 	ip=socket.gethostbyname(hostname)	
      prod_info=opts.prod_info
-     master=opts.master
-     if slave=='' and master == "":
-	print "Slave & master is null"
+     main=opts.main
+     if subordinate=='' and main == "":
+	print "Subordinate & main is null"
 	sys.exit()
      os=0
      cpu='Intel(R) Xeon(R) CPU E5-2680 v3 @ 2.50GHz'	
@@ -116,18 +116,18 @@ def cmdb_op():
      print cmd
      
      if cmd=="add_redis":
-        if master != '' and slave=='':
-     	     master_ip=socket.gethostbyname(master)	
-     	     add_redis(port,0,vip,master,idc,master_ip,prod_info,'')
+        if main != '' and subordinate=='':
+     	     main_ip=socket.gethostbyname(main)	
+     	     add_redis(port,0,vip,main,idc,main_ip,prod_info,'')
              sys.exit()
         
-     	master_ip=socket.gethostbyname(master)	
-        add_redis(port,0,vip,master,idc,master_ip,prod_info,'')
-        for s in slave.split(','):
-     	      slave_ip=socket.gethostbyname(s)	
-              add_redis(port,1,vip,s,idc,slave_ip,prod_info,master)
+     	main_ip=socket.gethostbyname(main)	
+        add_redis(port,0,vip,main,idc,main_ip,prod_info,'')
+        for s in subordinate.split(','):
+     	      subordinate_ip=socket.gethostbyname(s)	
+              add_redis(port,1,vip,s,idc,subordinate_ip,prod_info,main)
       
-     	#add_redis(port,db_role,vip,hostname,idc,ip,prod_info,master)
+     	#add_redis(port,db_role,vip,hostname,idc,ip,prod_info,main)
 	
      if cmd=="add_dbadmin_host":
      	add_dbadmin_host(hostname,ip)

@@ -52,36 +52,36 @@ def deploy_redis_on_special_server(user, ssh_port, target_host,
 
 
 @task
-def chk_and_deploy_special_slave_server(user, ssh_port, slave_host, slave_port,
-                                        master_host, master_port, repo_url,
+def chk_and_deploy_special_subordinate_server(user, ssh_port, subordinate_host, subordinate_port,
+                                        main_host, main_port, repo_url,
                                         redis_pkg_name, backup_invl,
                                         aof=0, aof_rewrite=1,
                                         max_mem_size=0):
     parm = parm_parse(locals())
 
     redis_cfg =\
-        Template(Cfg.redis_cfg).render(port=parm.slave_port, aof=parm.aof,
+        Template(Cfg.redis_cfg).render(port=parm.subordinate_port, aof=parm.aof,
                                        aof_rewrite=parm.aof_rewrite,
                                        max_mem_size=parm.max_mem_size)
     try:
-        r = redis.Redis(host=master_host, port=master_port, db=0)
+        r = redis.Redis(host=main_host, port=main_port, db=0)
         ret = r.ping()
-        gvar.LOGGER.info("Redis master is alived.")
+        gvar.LOGGER.info("Redis main is alived.")
     except Exception as e:
-        gvar.LOGGER.error("Please check orgin master. Error:[%s]" % e)
+        gvar.LOGGER.error("Please check orgin main. Error:[%s]" % e)
         raise DeployErr(305)
 
     ret = execute(chk_redis_env,
-                  host=parm.slave_host_str,
-                  redis_port=parm.slave_port)
+                  host=parm.subordinate_host_str,
+                  redis_port=parm.subordinate_port)
     if not ret.values()[0]:
         raise DeployErr(102)
 
     ret = execute(chk_redis_dir,
-                  host=parm.slave_host_str)
+                  host=parm.subordinate_host_str)
     if ret.values()[0]:
         ret = execute(install_redis_pkg,
-                      host=parm.slave_host_str,
+                      host=parm.subordinate_host_str,
                       redis_urls=parm.pkg_urls['redis'],
                       redis_pkg_name=parm.redis_pkg_name,
                       redis_unpack_dir=parm.redis_unpack_dir)
@@ -89,50 +89,50 @@ def chk_and_deploy_special_slave_server(user, ssh_port, slave_host, slave_port,
             raise DeployErr(201)
 
     ret = execute(deploy_redis,
-                  hosts=parm.slave_host_str,
-                  redis_port=parm.slave_port,
+                  hosts=parm.subordinate_host_str,
+                  redis_port=parm.subordinate_port,
                   redis_cfg=redis_cfg)
     if not ret.values()[0]:
         raise DeployErr(301)
 
     if parm.backup_invl:
         ret = execute(config_redis_backup,
-                      hosts=parm.slave_host_str,
-                      redis_port=parm.slave_port,
+                      hosts=parm.subordinate_host_str,
+                      redis_port=parm.subordinate_port,
                       script_url=parm.pkg_urls['bk_script'],
                       backup_invl=parm.backup_invl)
         if not ret.values()[0]:
             raise DeployErr(302)
 
     ret = execute(startup_redis,
-                  hosts=parm.slave_host_str,
-                  redis_port=parm.slave_port)
+                  hosts=parm.subordinate_host_str,
+                  redis_port=parm.subordinate_port)
     if not ret.values()[0]:
         raise DeployErr(303)
 
-    ret = slaveof(parm.slave_host, parm.slave_port,
-                  parm.master_host, parm.master_port)
+    ret = subordinateof(parm.subordinate_host, parm.subordinate_port,
+                  parm.main_host, parm.main_port)
     if not ret:
         raise DeployErr(304)
-    gvar.LOGGER.info("Deploy slave succeed.")
+    gvar.LOGGER.info("Deploy subordinate succeed.")
     return 1
 
 
 @task
-def chk_and_deploy_redis_replica(user, ssh_port, master_host, slave_host,
+def chk_and_deploy_redis_replica(user, ssh_port, main_host, subordinate_host,
                                  redis_port, repo_url, redis_pkg_name,
                                  backup_invl, aof,
                                  aof_rewrite, max_mem_size,
                                  vip1, vip2, apply_id):
     parm = parm_parse(locals())
-    redis_host_str = (parm.master_host_str, parm.slave_host_str)
+    redis_host_str = (parm.main_host_str, parm.subordinate_host_str)
     redis_cfg =\
         Template(Cfg.redis_cfg).render(port=parm.redis_port, aof=parm.aof,
                                        aof_rewrite=parm.aof_rewrite,
                                        max_mem_size=parm.max_mem_size)
 
-    ret = check(parm.master_host, parm.master_host_str, parm.slave_host,
-                parm.slave_host_str, redis_host_str, parm.redis_port,
+    ret = check(parm.main_host, parm.main_host_str, parm.subordinate_host,
+                parm.subordinate_host_str, redis_host_str, parm.redis_port,
                 parm.redis_ver)
 
     if ret != 1:
@@ -143,7 +143,7 @@ def chk_and_deploy_redis_replica(user, ssh_port, master_host, slave_host,
     if ret != 1:
         raise DeployErr(ret)
 
-    ret = deploy_redis_replica(parm.master_host, parm.slave_host,
+    ret = deploy_redis_replica(parm.main_host, parm.subordinate_host,
                                redis_host_str, parm.redis_port,
                                parm.backup_invl, parm.pkg_urls,
                                redis_cfg)
@@ -155,27 +155,27 @@ def chk_and_deploy_redis_replica(user, ssh_port, master_host, slave_host,
 
 @task
 def chk_and_deploy_redis_replica_for_migrate(
-        user, ssh_port, orgin_master_host, orgin_master_port, master_host,
-        slave_host, new_port, repo_url, redis_pkg_name, backup_invl,
+        user, ssh_port, orgin_main_host, orgin_main_port, main_host,
+        subordinate_host, new_port, repo_url, redis_pkg_name, backup_invl,
         redis_config, aof=0, aof_rewrite=1, max_mem_size=0):
 
     try:
-        r = redis.Redis(host=orgin_master_host, port=orgin_master_port, db=0)
+        r = redis.Redis(host=orgin_main_host, port=orgin_main_port, db=0)
         ret = r.ping()
-        gvar.LOGGER.info("Redis orgin master is alived.")
+        gvar.LOGGER.info("Redis orgin main is alived.")
     except Exception as e:
-        gvar.LOGGER.error("Please check orgin master. Error:[%s]" % e)
+        gvar.LOGGER.error("Please check orgin main. Error:[%s]" % e)
         raise DeployErr(305)
 
-    ret = chk_and_deploy_redis_replica(user, ssh_port, master_host, slave_host,
+    ret = chk_and_deploy_redis_replica(user, ssh_port, main_host, subordinate_host,
                                        new_port, repo_url, redis_pkg_name,
                                        backup_invl, redis_config,
                                        aof, aof_rewrite, max_mem_size)
     if ret != 1:
         raise DeployErr(ret)
 
-    ret = slaveof(master_host, new_port,
-                  orgin_master_host, orgin_master_port)
+    ret = subordinateof(main_host, new_port,
+                  orgin_main_host, orgin_main_port)
     if not ret:
         raise DeployErr(304)
     gvar.LOGGER.info("Deploy redis replica for migrate succeed.")

@@ -130,7 +130,7 @@ func getRedisHost(port string) (redisHostArr [][]string) {
 	//fmt.Println(pong, err)
 	//fmt.Println(IP)
 	res, err := client.Do("role").Result()
-	if res.([]interface{})[0] == "master" {
+	if res.([]interface{})[0] == "main" {
 
 		//fmt.Println(len(res.([]interface{})))
 		if len(res.([]interface{})[2].([]interface{})) != 0 {
@@ -141,7 +141,7 @@ func getRedisHost(port string) (redisHostArr [][]string) {
 			redisHostArr = append(redisHostArr, []string{IP, port, "", "", "2"})
 		}
 
-	} else if res.([]interface{})[0] == "slave" {
+	} else if res.([]interface{})[0] == "subordinate" {
 		//	fmt.Println(res.([]interface{})[0])
 		redisHostArr = append(redisHostArr, []string{IP, port, res.([]interface{})[1].(string), strconv.FormatInt(int64(res.([]interface{})[2].(int64)), 10), "1"})
 

@@ -33,28 +33,28 @@ def deploy_drc_codis_cluster():
     max_mem_size = 0
 
     m5_dashboard_host = "10.100.42.30"
-    m5_master1 = "10.100.42.51"
-    m5_slave1 = "10.100.42.52"
-    m5_master2 = "10.100.42.53"
-    m5_slave2 = "10.100.42.56"
-    m5_master3 = "10.100.42.57"
-    m5_slave3 = "10.100.42.58"
-    m5_redis_host_list = [(m5_master1, m5_slave1), (m5_master2, m5_slave2), (m5_master3, m5_slave3)]
-    m5_proxy_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2, m5_master3, m5_slave3]
-    m5_sync_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2, m5_master3, m5_slave3]
-    m5_sentinel_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2, m5_master3, m5_slave3, m5_dashboard_host]
+    m5_main1 = "10.100.42.51"
+    m5_subordinate1 = "10.100.42.52"
+    m5_main2 = "10.100.42.53"
+    m5_subordinate2 = "10.100.42.56"
+    m5_main3 = "10.100.42.57"
+    m5_subordinate3 = "10.100.42.58"
+    m5_redis_host_list = [(m5_main1, m5_subordinate1), (m5_main2, m5_subordinate2), (m5_main3, m5_subordinate3)]
+    m5_proxy_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2, m5_main3, m5_subordinate3]
+    m5_sync_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2, m5_main3, m5_subordinate3]
+    m5_sentinel_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2, m5_main3, m5_subordinate3, m5_dashboard_host]
 
     yz_dashboard_host = "10.100.86.51"
-    yz_master1 = "10.100.86.27"
-    yz_slave1 = "10.100.86.28"
-    yz_master2 = "10.100.86.29"
-    yz_slave2 = "10.100.86.30"
-    yz_master3 = "10.100.86.31"
-    yz_slave3 = "10.100.86.32"
-    yz_redis_host_list = [(yz_master1, yz_slave1), (yz_master2, yz_slave2), (yz_master3, yz_slave3)]
-    yz_proxy_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2, yz_master3, yz_slave3]
-    yz_sync_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2, yz_master3, yz_slave3]
-    yz_sentinel_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2, yz_master3, yz_slave3, yz_dashboard_host]
+    yz_main1 = "10.100.86.27"
+    yz_subordinate1 = "10.100.86.28"
+    yz_main2 = "10.100.86.29"
+    yz_subordinate2 = "10.100.86.30"
+    yz_main3 = "10.100.86.31"
+    yz_subordinate3 = "10.100.86.32"
+    yz_redis_host_list = [(yz_main1, yz_subordinate1), (yz_main2, yz_subordinate2), (yz_main3, yz_subordinate3)]
+    yz_proxy_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2, yz_main3, yz_subordinate3]
+    yz_sync_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2, yz_main3, yz_subordinate3]
+    yz_sentinel_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2, yz_main3, yz_subordinate3, yz_dashboard_host]
 
     redis_start_port = 6100
     dashboard_port = 18032
@@ -118,24 +118,24 @@ def deploy_drc_codis_cluster2():
     max_mem_size = 0
 
     m5_dashboard_host = "10.100.42.30"
-    m5_master1 = "10.100.42.28"
-    m5_slave1 = "10.100.42.29"
-    m5_master2 = "10.100.42.12"
-    m5_slave2 = "10.100.42.16"
-    m5_redis_host_list = [(m5_master1, m5_slave1), (m5_master2, m5_slave2)]
-    m5_proxy_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2]
-    m5_sync_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2]
-    m5_sentinel_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2, m5_dashboard_host]
+    m5_main1 = "10.100.42.28"
+    m5_subordinate1 = "10.100.42.29"
+    m5_main2 = "10.100.42.12"
+    m5_subordinate2 = "10.100.42.16"
+    m5_redis_host_list = [(m5_main1, m5_subordinate1), (m5_main2, m5_subordinate2)]
+    m5_proxy_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2]
+    m5_sync_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2]
+    m5_sentinel_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2, m5_dashboard_host]
 
     yz_dashboard_host = "10.100.86.51"
-    yz_master1 = "10.100.86.21"
-    yz_slave1 = "10.100.86.24"
-    yz_master2 = "10.100.86.25"
-    yz_slave2 = "10.100.86.26"
-    yz_redis_host_list = [(yz_master1, yz_slave1), (yz_master2, yz_slave2)]
-    yz_proxy_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2]
-    yz_sync_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2]
-    yz_sentinel_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2, yz_dashboard_host]
+    yz_main1 = "10.100.86.21"
+    yz_subordinate1 = "10.100.86.24"
+    yz_main2 = "10.100.86.25"
+    yz_subordinate2 = "10.100.86.26"
+    yz_redis_host_list = [(yz_main1, yz_subordinate1), (yz_main2, yz_subordinate2)]
+    yz_proxy_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2]
+    yz_sync_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2]
+    yz_sentinel_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2, yz_dashboard_host]
 
     redis_start_port = 6100
     dashboard_port = 18024
@@ -202,24 +202,24 @@ def deploy_drc_codis_cluster3():
     max_mem_size = 0
 
     m5_dashboard_host = "10.100.42.30"
-    m5_master1 = "10.100.42.11"
-    m5_slave1 =  "10.100.42.15"
-    m5_master2 = "10.100.42.20"
-    m5_slave2 =  "10.100.42.37"
-    m5_redis_host_list = [(m5_master1, m5_slave1), (m5_master2, m5_slave2)]
-    m5_proxy_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2]
-    m5_sync_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2]
-    m5_sentinel_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2, m5_dashboard_host]
+    m5_main1 = "10.100.42.11"
+    m5_subordinate1 =  "10.100.42.15"
+    m5_main2 = "10.100.42.20"
+    m5_subordinate2 =  "10.100.42.37"
+    m5_redis_host_list = [(m5_main1, m5_subordinate1), (m5_main2, m5_subordinate2)]
+    m5_proxy_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2]
+    m5_sync_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2]
+    m5_sentinel_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2, m5_dashboard_host]
 
     yz_dashboard_host = "10.100.86.51"
-    yz_master1 = "10.100.86.33"
-    yz_slave1 =  "10.100.86.34"
-    yz_master2 = "10.100.86.35"
-    yz_slave2 =  "10.100.86.36"
-    yz_redis_host_list = [(yz_master1, yz_slave1), (yz_master2, yz_slave2)]
-    yz_proxy_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2]
-    yz_sync_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2]
-    yz_sentinel_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2, yz_dashboard_host]
+    yz_main1 = "10.100.86.33"
+    yz_subordinate1 =  "10.100.86.34"
+    yz_main2 = "10.100.86.35"
+    yz_subordinate2 =  "10.100.86.36"
+    yz_redis_host_list = [(yz_main1, yz_subordinate1), (yz_main2, yz_subordinate2)]
+    yz_proxy_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2]
+    yz_sync_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2]
+    yz_sentinel_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2, yz_dashboard_host]
 
     redis_start_port = 6190
     dashboard_port = 18195
@@ -288,22 +288,22 @@ def deploy_no_drc_codis_cluster():
     max_mem_size = 0
 
     m5_dashboard_host = "10.100.42.30"
-    m5_master1 = "10.100.42.61"
-    m5_slave1 = "10.100.42.62"
-    m5_master2 = "10.100.42.64"
-    m5_slave2 = "10.100.42.65"
-    m5_redis_host_list = [(m5_master1, m5_slave1), (m5_master2, m5_slave2)]
-    m5_proxy_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2]
-    m5_sentinel_hosts = [m5_master1, m5_slave1, m5_master2, m5_slave2, m5_dashboard_host]
+    m5_main1 = "10.100.42.61"
+    m5_subordinate1 = "10.100.42.62"
+    m5_main2 = "10.100.42.64"
+    m5_subordinate2 = "10.100.42.65"
+    m5_redis_host_list = [(m5_main1, m5_subordinate1), (m5_main2, m5_subordinate2)]
+    m5_proxy_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2]
+    m5_sentinel_hosts = [m5_main1, m5_subordinate1, m5_main2, m5_subordinate2, m5_dashboard_host]
 
     yz_dashboard_host = "10.100.86.51"
-    yz_master1 = "10.100.86.1"
-    yz_slave1 = "10.100.86.2"
-    yz_master2 = "10.100.86.3"
-    yz_slave2 = "10.100.86.4"
-    yz_redis_host_list = [(yz_master1, yz_slave1), (yz_master2, yz_slave2)]
-    yz_proxy_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2]
-    yz_sentinel_hosts = [yz_master1, yz_slave1, yz_master2, yz_slave2, yz_dashboard_host]
+    yz_main1 = "10.100.86.1"
+    yz_subordinate1 = "10.100.86.2"
+    yz_main2 = "10.100.86.3"
+    yz_subordinate2 = "10.100.86.4"
+    yz_redis_host_list = [(yz_main1, yz_subordinate1), (yz_main2, yz_subordinate2)]
+    yz_proxy_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2]
+    yz_sentinel_hosts = [yz_main1, yz_subordinate1, yz_main2, yz_subordinate2, yz_dashboard_host]
 
     redis_start_port = 6400
     group_num_of_each_pair = 1
@@ -353,18 +353,18 @@ def arch_Call_chk_and_deploy_codis_cluster():
     max_mem_size = 0
 
     m5_dashboard_host = "10.100.20.1"
-    m5_redis_master = "10.100.20.1"
-    m5_redis_slave = "10.100.20.2"
-    m5_redis_host_list = [(m5_redis_master, m5_redis_slave)]
-    m5_proxy_hosts = [m5_redis_slave, m5_redis_master]
-    m5_sync_hosts = [m5_redis_master, m5_redis_slave]
+    m5_redis_main = "10.100.20.1"
+    m5_redis_subordinate = "10.100.20.2"
+    m5_redis_host_list = [(m5_redis_main, m5_redis_subordinate)]
+    m5_proxy_hosts = [m5_redis_subordinate, m5_redis_main]
+    m5_sync_hosts = [m5_redis_main, m5_redis_subordinate]
 
     yz_dashboard_host = "10.100.93.88"
-    yz_redis_master = "10.100.93.88"
-    yz_redis_slave = "10.100.93.89"
-    yz_redis_host_list = [(yz_redis_master, yz_redis_slave)]
-    yz_proxy_hosts = [yz_redis_slave, yz_redis_master]
-    yz_sync_hosts = [yz_redis_master, yz_redis_slave]
+    yz_redis_main = "10.100.93.88"
+    yz_redis_subordinate = "10.100.93.89"
+    yz_redis_host_list = [(yz_redis_main, yz_redis_subordinate)]
+    yz_proxy_hosts = [yz_redis_subordinate, yz_redis_main]
+    yz_sync_hosts = [yz_redis_main, yz_redis_subordinate]
 
     redis_start_port = 6000
     group_num = 2
@@ -540,13 +540,13 @@ def call_dashboard_add_groups_and_servers():
     dashboard_add_groups_and_servers(
         user="op_DBA01", ssh_port=33312,
         dashboard_host='10.100.86.51', dashboard_port=18038,
-        master_host='10.100.86.16', slave_host='10.100.86.17', redis_port=[6082, 6083],
+        main_host='10.100.86.16', subordinate_host='10.100.86.17', redis_port=[6082, 6083],
         start_group=5)
 
     dashboard_add_groups_and_servers(
         user="op_DBA01", ssh_port=33312,
         dashboard_host='10.100.86.51', dashboard_port=18038,
-        master_host='10.100.86.18', slave_host='10.100.86.19', redis_port=[6082, 6083],
+        main_host='10.100.86.18', subordinate_host='10.100.86.19', redis_port=[6082, 6083],
         start_group=7)
 
 
@@ -556,7 +556,7 @@ def call_yz_dashboard_add_groups_and_servers():
     dashboard_add_groups_and_servers(
         user="Li_QingBin", ssh_port=33312,
         dashboard_host='10.100.97.41', dashboard_port=18001,
-        master_host='10.100.97.11', slave_host='10.100.97.13', redis_port=[6030, 6059],
+        main_host='10.100.97.11', subordinate_host='10.100.97.13', redis_port=[6030, 6059],
         start_group=11)
 
 
@@ -584,7 +584,7 @@ def call_single_deploy_and_startup_proxy():
 def yz_cps_call_chk_and_deploy_codis_cluster():
     chk_and_deploy_codis_cluster(
         ser="Li_QingBin", ssh_port=33312,
-        master_host="10.100.96.51", slave_host="10.100.96.126", redis_port=[6000, 6014], max_mem_size=0,
+        main_host="10.100.96.51", subordinate_host="10.100.96.126", redis_port=[6000, 6014], max_mem_size=0,
         dashboard_host="10.100.96.131", dashboard_port=18100,
         watcher_port=17100,
         proxy_hosts=['10.100.96.51', '10.100.96.131'], port_list=[(19340, 21340), (19350, 21350)], ip_prefix='10.100.96', kafka_addrs=["10.100.20.218:6678", "10.100.20.219:6678", "10.100.20.220:6678", "10.100.96.69:6678", "10.100.96.70:6678", "10.100.96.71:6678"], proxy_seq=0,
@@ -597,7 +597,7 @@ def yz_cps_call_chk_and_deploy_codis_cluster():
 def m5_cps_call_chk_and_deploy_codis_cluster():
     chk_and_deploy_codis_cluster(
         user="Li_QingBin", ssh_port=33312,
-        master_host="10.100.20.126", slave_host="10.100.20.130", redis_port=[6000, 6014], max_mem_size=0,
+        main_host="10.100.20.126", subordinate_host="10.100.20.130", redis_port=[6000, 6014], max_mem_size=0,
         dashboard_host="10.100.42.14", dashboard_port=18100,
         watcher_port=17100,
         proxy_hosts=['10.100.20.126', '10.100.42.14'], port_list=[(19340, 21340), (19350, 21350)], ip_prefix='10.100.20', kafka_addrs=["10.100.20.218:6678", "10.100.20.219:6678", "10.100.20.220:6678", "10.100.96.69:6678", "10.100.96.70:6678", "10.100.96.71:6678"], proxy_seq=0,
@@ -667,20 +667,20 @@ def deploy_test_drc_codis_cluster():
     max_mem_size = 0
 
     m5_dashboard_host = "10.100.20.1"
-    m5_master1 = "10.100.20.1"
-    m5_slave1 = "10.100.20.2"
-    m5_redis_host_list = [(m5_master1, m5_slave1)]
-    m5_proxy_hosts = [m5_master1, m5_slave1]
-    m5_sync_hosts = [m5_master1, m5_slave1]
-    m5_sentinel_hosts = [m5_master1, m5_slave1]
+    m5_main1 = "10.100.20.1"
+    m5_subordinate1 = "10.100.20.2"
+    m5_redis_host_list = [(m5_main1, m5_subordinate1)]
+    m5_proxy_hosts = [m5_main1, m5_subordinate1]
+    m5_sync_hosts = [m5_main1, m5_subordinate1]
+    m5_sentinel_hosts = [m5_main1, m5_subordinate1]
 
     yz_dashboard_host = "10.100.97.245"
-    yz_master1 = "10.100.97.245"
-    yz_slave1 = "10.100.97.246"
-    yz_redis_host_list = [(yz_master1, yz_slave1)]
-    yz_proxy_hosts = [yz_master1, yz_slave1]
-    yz_sync_hosts = [yz_master1, yz_slave1]
-    yz_sentinel_hosts = [yz_master1, yz_slave1]
+    yz_main1 = "10.100.97.245"
+    yz_subordinate1 = "10.100.97.246"
+    yz_redis_host_list = [(yz_main1, yz_subordinate1)]
+    yz_proxy_hosts = [yz_main1, yz_subordinate1]
+    yz_sync_hosts = [yz_main1, yz_subordinate1]
+    yz_sentinel_hosts = [yz_main1, yz_subordinate1]
 
     redis_start_port = 6110
     dashboard_port = 18011
@@ -746,12 +746,12 @@ def deploy_no_drc_codis_cluster_single():
     max_mem_size = 0
 
     m5_dashboard_host = "10.100.42.30"
-    m5_master1 = "10.100.42.24"
-    m5_slave1 = "10.100.42.27"
-    m5_redis_host_list = [(m5_master1, m5_slave1)]
-    m5_proxy_hosts = [m5_master1, m5_slave1]
-    m5_sentinel_hosts = [m5_master1, m5_slave1, m5_dashboard_host]
-    #m5_sentinel_hosts = [m5_master1, m5_slave1]
+    m5_main1 = "10.100.42.24"
+    m5_subordinate1 = "10.100.42.27"
+    m5_redis_host_list = [(m5_main1, m5_subordinate1)]
+    m5_proxy_hosts = [m5_main1, m5_subordinate1]
+    m5_sentinel_hosts = [m5_main1, m5_subordinate1, m5_dashboard_host]
+    #m5_sentinel_hosts = [m5_main1, m5_subordinate1]
 
     redis_start_port = 6400
     group_num_of_each_pair = 2
@@ -790,12 +790,12 @@ def deploy_no_drc_codis_cluster_m5test():
     max_mem_size = 0
 
     m5_dashboard_host = "10.100.90.163"
-    m5_master1 = "10.100.90.161"
-    m5_slave1 = "10.100.90.162"
-    m5_redis_host_list = [(m5_master1, m5_slave1)]
-    m5_proxy_hosts = [m5_master1, m5_slave1]
-    m5_sentinel_hosts = [m5_master1, m5_slave1, m5_dashboard_host]
-    #m5_sentinel_hosts = [m5_master1, m5_slave1]
+    m5_main1 = "10.100.90.161"
+    m5_subordinate1 = "10.100.90.162"
+    m5_redis_host_list = [(m5_main1, m5_subordinate1)]
+    m5_proxy_hosts = [m5_main1, m5_subordinate1]
+    m5_sentinel_hosts = [m5_main1, m5_subordinate1, m5_dashboard_host]
+    #m5_sentinel_hosts = [m5_main1, m5_subordinate1]
 
     redis_start_port = 8800
     group_num_of_each_pair = 3

@@ -37,7 +37,7 @@ class ParmParse():
                 '.*host$'               The parameter with host suffix, be used to defined as different role with prefix.
                 proxy_host              The host be defined as a proxy role.
                 redis_host_list         The redis_host_list is list with redis group.
-                                        Example: [('master1', 'slave1'), ('master2', 'slave'2),...].
+                                        Example: [('main1', 'subordinate1'), ('main2', 'subordinate'2),...].
                 repo_url                Get packages from this url.
                 codis3_package_name     Codis3 package name in repo.
                 bk_script_name          Backup script name in repo.

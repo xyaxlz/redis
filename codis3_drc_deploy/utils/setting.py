@@ -93,10 +93,10 @@ rdbcompression yes
 rdbchecksum yes
 dbfilename "redis-{{port}}-dump.rdb"
 dir "/data/server/codis3_drc/redis/data"
-slave-serve-stale-data yes
-slave-read-only yes
+subordinate-serve-stale-data yes
+subordinate-read-only yes
 repl-disable-tcp-nodelay no
-slave-priority 100
+subordinate-priority 100
 appendonly no
 appendfsync everysec
 no-appendfsync-on-rewrite no
@@ -115,7 +115,7 @@ zset-max-ziplist-entries 128
 zset-max-ziplist-value 64
 activerehashing yes
 client-output-buffer-limit normal 0 0 0
-client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit subordinate 256mb 64mb 60
 client-output-buffer-limit pubsub 32mb 8mb 60
 hz 10
 aof-rewrite-incremental-fsync yes
@@ -300,8 +300,8 @@ proxy_max_offheap_size = "1024mb"
 # Set heap placeholder to reduce GC frequency.
 proxy_heap_placeholder = "256mb"
 
-# Set backend wait until write is acknowledged by at least n slaves, default is 0
-backend_wait_slaves = 0
+# Set backend wait until write is acknowledged by at least n subordinates, default is 0
+backend_wait_subordinates = 0
 
 # Proxy will ping backend redis (and clear 'MASTERDOWN' state) in a predefined interval. (0 to disable)
 backend_ping_period = "5s"
